@@ -16,7 +16,7 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "kak/storage" : "*",
+        "kak/storage" : "*"
     },
     "autoload": {
         "psr-4": {
