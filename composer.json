@@ -1,0 +1,26 @@
+{
+    "name": "kak/upload",
+    "description": "Upload files widgets for Yii2",
+    "type": "yii2-extension",
+    "keywords": ["yii2","upload files widget"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/sanchezzzhak/kak-upload/issues?state=open",
+        "source": "https://github.com/sanchezzzhak/kak-upload"
+    },
+    "authors": [
+        {
+            "name": "Tutik Alexsandr",
+            "email": "sanchezzzhak@ya.ru"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "kak/storage" : "*",
+    },
+    "autoload": {
+        "psr-4": {
+            "kak\\widgets\\upload\\": "src"
+        }
+    }
+}
