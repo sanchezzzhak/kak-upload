@@ -26,11 +26,7 @@ class Upload extends Widget
      * @var $models
      */
     public $models;
-    /**
-     * single or multiple uploads
-     * @var bool
-     */
-    public $multiple = true;
+
 
     /**
      * set media types or file extensions ['.gif', '.jpg', '.png', '.doc'] from client validation html5
@@ -76,7 +72,7 @@ class Upload extends Widget
         }
         $replace = [];
         foreach ($this->storages as $storage){
-            $replace[] = \Yii::createObject($storage);
+            $replace[] = \Yii::createObject(array_merge($storage, ['widget' => $this ]));
         }
         $this->storages = $replace;
     }

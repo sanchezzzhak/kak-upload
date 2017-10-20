@@ -27,7 +27,10 @@
     <div class="upload-tabs">
         <ul class="nav nav-stacked">
             <?php foreach ($context->storages as $storage):?>
-               <?=\yii\helpers\Html::tag('li', \yii\helpers\Html::a($storage->name, '#'), [ 'data-name' => $storage->name ]); ?>
+               <?=\yii\helpers\Html::tag('li', \yii\helpers\Html::a($storage->label, '#'), [
+                    'data-click' => 'item-storage',
+                    'data-name' => $storage->name
+                ]); ?>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -36,7 +39,10 @@
     </div>
     <div class="upload-area">
         <?php foreach ($context->storages as $storage):?>
-            <?=\yii\helpers\Html::tag('div', $storage->run(), ['data-name' => $storage->name, 'class' => 'upload-panel upload-panel-' . $storage->name ])?>
+            <?=\yii\helpers\Html::tag('div', $storage->run(), [
+                'data-name' => $storage->name,
+                'class' => 'upload-panel upload-panel-' . $storage->name
+            ])?>
         <?php endforeach; ?>
     </div>
 </div>

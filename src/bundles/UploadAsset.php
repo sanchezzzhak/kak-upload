@@ -16,13 +16,10 @@ class UploadAsset extends \yii\web\AssetBundle
     public $css = [
         'css/kak-upload.css'
     ];
-
     public $js = [
         'js/kak-upload.js'
     ];
-
-
     public $depends = [
-        '\kak\widgets\upload\bundles\BlueimpFileUploadAsset'
+        '\kak\widgets\upload\bundles\TmplAsset'
     ];
 }
