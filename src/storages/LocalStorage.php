@@ -3,6 +3,7 @@ namespace kak\widgets\upload\storages;
 use kak\widgets\upload\bundles\UploadLocalAsset;
 use yii\base\Object;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\View;
 
 class LocalStorage extends base\BaseStorage
@@ -24,29 +25,70 @@ class LocalStorage extends base\BaseStorage
     public $labelCancel            = 'Cancel';
     public $labelDelete            = 'Delete';
 
+
+    public $url = ['site/upload'];
+    public $storage = 'storage';
+
     /**
-     * @var array
-     * array['fields'] array Defines the feilds to be shown by scaffolding.
-     * array['fields'][fieldName] array Defines the options for a field, or just enables the field if array is not applied.
-     * array['fields'][fieldName]['name'] string Overrides the field name (default is the array key)
-     * array['fields'][fieldName]['model'] string (optional) Overrides the model if the field is a belongsTo assoicated value.
-     * array['fields'][fieldName]['width'] string Defines the width of the field for paginate views. Examples are "100px" or "auto"
-     * array['fields'][fieldName]['align'] string Alignment types for paginate views (left, right, center)
-     * array['fields'][fieldName]['format'] string Formatting options for paginate fields. Options include ('currency','nice','niceShort','timeAgoInWords' or a valid Date() format)
-     * array['fields'][fieldName]['title'] string Changes the field name shown in views.
-     * array['fields'][fieldName]['desc'] string The description shown in edit/create views.
-     * array['fields'][fieldName]['readonly'] boolean True prevents users from changing the value in edit/create forms.
-     * array['fields'][fieldName]['type'] string Defines the input type used by the Form helper (example 'password')
-     * array['fields'][fieldName]['options'] array Defines a list of string options for drop down lists.
-     * array['fields'][fieldName]['editor'] boolean If set to True will show a WYSIWYG editor for this field.
-     * array['fields'][fieldName]['default'] string The default value for create forms.
+     * @var $clientOptions array containing the config js params.
+     * $clientOptions = [
+     *      'dataType' => 'json',
+     *      'type' => 'post',
+     *      'singleFileUploads' =>  true,
+     *      'limitMultiFileUploadSize' => 0,
+     *      'limitConcurrentUploads' => 3,
+     *      'autoUpload' => true,
+     *
+     * ]
+     * @see https://github.com/blueimp/jQuery-File-Upload/wiki/Options
      */
     public $clientOptions = [];
+    public $clientJsEvemts = [];
 
 
+    public $templateButtonCancel = '
+        <button class="btn inline btn-warning" data-click="cencel-upload">
+            <i class="glyphicon glyphicon-ban-circle"></i>
+            <span>{labelCancel}</span>
+        </button>
+    ';
 
-    public $templateUploadItem;
-    public $templateDownloadItem;
+    public $templateButtonStart = '
+        <button class="btn inline btn-primary start" disabled="disabled" data-click="start-upload">
+            <i class="glyphicon glyphicon-upload"></i>
+            <span>{labelStart}</span>
+            </button>
+        ';
+
+    public $templateProgressBar = '
+        <strong class="error text-danger"></strong>
+        <p class="size">{labelProcessingUpload}</p>
+        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="progress-bar bar" style="width:0%;"></div>
+        </div>
+    ';
+
+    public $templateItem = '
+    <div class="upload-item">
+        <p class="name">{fileName}</p>
+        {progressBar}
+        {btnStart}
+        {btnCancel}
+    </div>
+    ';
+
+    public function init()
+    {
+        parent::init();
+        $this->initDefaultOptions();
+    }
+
+    private function initDefaultOptions()
+    {
+        $this->clientOptions['url'] = Url::to( $this->url);
+    }
+
+
 
 
     public function getLink()
@@ -57,12 +99,13 @@ class LocalStorage extends base\BaseStorage
     public function run()
     {
         UploadLocalAsset::register( $this->widget->getView());
-
-
-        $content = Html::beginTag('div');
+        $content = Html::beginTag('div', ['class' => 'kak-upload-local', 'data' => $this->clientOptions ]);
         $content.= Html::tag('span', Html::tag('span', $this->labelAddFiles ) . Html::fileInput('file') ,['class' => 'btn fileinput-button']);
-        $content.= Html::endTag('div');
+
         $content.= Html::tag('div','',['class' => 'dropzone-files']);
+        $content.= Html::tag('div','',['class' => 'upload-files']);
+        $content.= Html::endTag('div');
+
 
         return $content;
     }
